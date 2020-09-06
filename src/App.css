@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+.myDialog {
+  margin: 20px;
+}
+
+.myDialogBody {
+  margin: 20px;
+  border: solid black 1px;
+  color: blue;
+}
+
+.myDialogPanel {
+  margin: 20px;
+}
+
+.myDialogBody form {
+  padding: 20px;
+}
