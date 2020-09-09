@@ -1,9 +1,16 @@
 import React from 'react';
 import { Matches } from './Matches';
+import useEventListener from '@use-it/event-listener';
 import { MyDialogView, MyDialogEdit } from './MyDialog';
 
 export function MyDialogLayout(myDialogProps) {
-  const { myDialogToggleOpen } = myDialogProps;
+  const { myDialogToggleOpen, myDialogEscape } = myDialogProps;
+  useEventListener('keydown', ({ keyCode }) => {
+    // escape
+    if (keyCode === 27) {
+      myDialogEscape();
+    }
+  });
   return (
     <div className="myDialog">
       <button onClick={myDialogToggleOpen}>Toggle MyDialog</button>

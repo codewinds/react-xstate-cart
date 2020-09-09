@@ -4,10 +4,11 @@ const myDialogEditingStates = {
   initial: 'init',
   states: {
     init: {},
+    // validating
     saving: {
       entry: ['myDialogRecordTransient'],
       invoke: {
-        // id: 'saveUser',
+        // id: 'saveUser', // what does this do?
         src: 'saveUser',
         onDone: {
           target: '#app.mydialog.viewing',
@@ -21,7 +22,6 @@ const myDialogEditingStates = {
     },
     errored: {
       on: {
-        MYDIALOG_TOGGLE_OPEN: '#app.mydialog.closed',
         MYDIALOG_SAVE: 'saving'
       }
     }
@@ -50,6 +50,7 @@ const appMachine = Machine(
           editing: {
             on: {
               MYDIALOG_TOGGLE_OPEN: 'closed',
+              MYDIALOG_ESCAPE: 'viewing',
               MYDIALOG_SAVE: '.saving'
             },
             ...myDialogEditingStates
@@ -66,7 +67,8 @@ const appMachine = Machine(
   {
     actions: {
       myDialogRecordTransient: assign((context, data) => ({
-        myDialogTransientData: data
+        myDialogTransientData: data,
+        myDialogError: null
       })),
       myDialogUpdate: assign((context, { data: { firstName } }) => ({
         myDialogFirstName: firstName,

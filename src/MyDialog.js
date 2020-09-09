@@ -22,8 +22,8 @@ export function MyDialogEdit({
       <form
         method="post"
         onSubmit={(ev) => {
-          myDialogSave({ firstName: ev.target.firstName.value });
           ev.preventDefault();
+          myDialogSave({ firstName: ev.target.firstName.value });
           return false;
         }}
       >
