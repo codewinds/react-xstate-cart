@@ -1,5 +1,5 @@
 import React from 'react';
-import { Matches } from './Matches';
+import { AppServiceMatches as Matches } from './reactContexts';
 import useEventListener from '@use-it/event-listener';
 import { MyDialogView, MyDialogEdit } from './MyDialog';
 
