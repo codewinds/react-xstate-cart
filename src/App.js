@@ -24,7 +24,7 @@ const appMachineWithOptions = appMachine.withConfig({
 
 function App() {
   const [current, send] = useMachine(appMachineWithOptions, {
-    devTools: true
+    devTools: true // required to use inspect
   });
 
   const myDialogFirstName = current.context.myDialogFirstName;

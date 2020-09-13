@@ -8,7 +8,7 @@ const myDialogEditingStates = {
     saving: {
       entry: ['myDialogRecordTransient'],
       invoke: {
-        // id: 'saveUser', // what does this do?
+        id: 'saveUser',
         src: 'saveUser',
         onDone: {
           target: '#app.mydialog.viewing',
