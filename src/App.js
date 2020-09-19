@@ -27,7 +27,7 @@ function App() {
     devTools: true // required to use inspect
   });
 
-  const myDialogFirstName = current.context.myDialogFirstName;
+  const myDialogData = current.context.myDialogData;
   const myDialogError = current.context.myDialogError;
   const myDialogTransientData = current.context.myDialogTransientData;
   const myDialogToggleOpen = () => send('MYDIALOG_TOGGLE_OPEN');
@@ -35,7 +35,7 @@ function App() {
   const myDialogSave = ({ firstName }) => send('MYDIALOG_SAVE', { firstName });
   const myDialogEscape = () => send('MYDIALOG_ESCAPE');
   const myDialogProps = {
-    myDialogFirstName,
+    myDialogData,
     myDialogToggleOpen,
     myDialogEdit,
     myDialogSave,

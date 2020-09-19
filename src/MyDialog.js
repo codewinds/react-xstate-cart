@@ -1,16 +1,16 @@
 import React from 'react';
-import { get } from 'lodash/fp';
+import { fromPairs, get } from 'lodash/fp';
 
-export function MyDialogView({ myDialogFirstName, myDialogEdit }) {
+export function MyDialogView({ myDialogData, myDialogEdit }) {
   return (
     <div className="myDialogPanel">
-      <p>First Name: {myDialogFirstName || 'Anonymous'}</p>
+      <p>First Name: {get('firstName', myDialogData) || 'Anonymous'}</p>
       <button onClick={myDialogEdit}>Edit</button>
     </div>
   );
 }
 export function MyDialogEdit({
-  myDialogFirstName,
+  myDialogData,
   myDialogSave,
   myDialogError,
   myDialogTransientData,
@@ -23,14 +23,16 @@ export function MyDialogEdit({
         method="post"
         onSubmit={(ev) => {
           ev.preventDefault();
-          myDialogSave({ firstName: ev.target.firstName.value });
-          return false;
+          const formData = new FormData(ev.target);
+          const dataObj = fromPairs(Array.from(formData.entries()));
+          myDialogSave(dataObj);
         }}
       >
         <input
           name="firstName"
           defaultValue={
-            get('firstName', myDialogTransientData) || myDialogFirstName
+            get('firstName', myDialogTransientData) ||
+            get('firstName', myDialogData)
           }
           placeholder="Enter your first name"
           autoFocus={true}

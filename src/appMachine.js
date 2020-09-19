@@ -1,18 +1,16 @@
-import { Machine, assign } from 'xstate';
+import { Machine, assign, send } from 'xstate';
 
 const myDialogEditingStates = {
   initial: 'init',
   states: {
     init: {},
-    // validating
     saving: {
       entry: ['myDialogRecordTransient'],
       invoke: {
         id: 'saveUser',
         src: 'saveUser',
         onDone: {
-          target: '#app.mydialog.viewing',
-          actions: ['myDialogUpdate']
+          actions: ['myDialogUpdate', 'myDialogNext']
         },
         onError: {
           target: 'errored',
@@ -33,7 +31,7 @@ const appMachine = Machine(
     id: 'app',
     type: 'parallel',
     context: {
-      myDialogFirstName: '',
+      myDialogData: { firstName: '' },
       myDialogError: null,
       myDialogTransientData: null
     },
@@ -51,7 +49,8 @@ const appMachine = Machine(
             on: {
               MYDIALOG_TOGGLE_OPEN: 'closed',
               MYDIALOG_ESCAPE: 'viewing',
-              MYDIALOG_SAVE: '.saving'
+              MYDIALOG_SAVE: '.saving',
+              MYDIALOG_NEXT: 'viewing'
             },
             ...myDialogEditingStates
           },
@@ -70,9 +69,12 @@ const appMachine = Machine(
         myDialogTransientData: data,
         myDialogError: null
       })),
-      myDialogUpdate: assign((context, { data: { firstName } }) => ({
-        myDialogFirstName: firstName,
+      myDialogUpdate: assign((context, { data }) => ({
+        myDialogData: data,
         myDialogTransientData: null
+      })),
+      myDialogNext: send((context, event) => ({
+        type: 'MYDIALOG_NEXT'
       })),
       myDialogErrored: assign((context, { data: err }) => ({
         myDialogError: err
