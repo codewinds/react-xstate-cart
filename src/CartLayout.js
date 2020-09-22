@@ -1,17 +1,7 @@
 import React from 'react';
-import {
-  AppServiceMatches as Matches,
-  AppServiceDoesNotMatch as DoesNotMatch
-} from './reactContexts';
+import { AppServiceMatches as Matches, AppServiceDoesNotMatch as DoesNotMatch } from './reactContexts';
 import useEventListener from '@use-it/event-listener';
-import {
-  CartItems,
-  CartDiscounts,
-  CartAccount,
-  CartShipping,
-  CartReview,
-  CartReceipt
-} from './Cart';
+import { CartItems, CartDiscounts, CartAccount, CartShipping, CartPayment, CartReview, CartReceipt } from './Cart';
 
 export function CartLayout(cartProps) {
   const { toggleOpen, escape } = cartProps;
@@ -37,6 +27,9 @@ export function CartLayout(cartProps) {
           </Matches>
           <Matches state={'cart.shipping'}>
             <CartShipping {...cartProps} />
+          </Matches>
+          <Matches state={'cart.payment'}>
+            <CartPayment {...cartProps} />
           </Matches>
           <Matches state={'cart.review'}>
             <CartReview {...cartProps} />

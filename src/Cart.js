@@ -106,6 +106,23 @@ export function CartShipping(cartProps) {
   );
 }
 
+export function CartPayment(cartProps) {
+  const { error, transient, isBeingSaved, previous, saveNext } = cartProps;
+  const section = 'payment';
+  const sectionData = cartProps[section];
+  const commonProps = { transient, sectionData, isBeingSaved };
+  const formProps = { error, section, previous, saveNext, isBeingSaved };
+  return (
+    <div className="cartPanel">
+      <h1>Payment</h1>
+      <Form {...formProps}>
+        <Input name="creditCard" placeholder="Enter your credit card number" autoFocus={true} {...commonProps} />
+        <Input name="nameOnCard" placeholder="Enter the name on your card" {...commonProps} />
+      </Form>
+    </div>
+  );
+}
+
 export function CartReview(cartProps) {
   const { error, isBeingSaved, previous, saveNext } = cartProps;
   const section = 'review';
@@ -117,36 +134,33 @@ export function CartReview(cartProps) {
     isBeingSaved,
     saveLabel: 'Pay'
   };
-  const total = 10 * cartProps.items.ebookCount;
   return (
     <div className="cartPanel">
       <h1>Review</h1>
       <Form {...formProps}>
-        <h4>Items</h4>
-        <p>Fantastic Ebook: {cartProps.items.ebookCount}</p>
-        <h4>Discounts</h4>
-        <p>Discount code: {cartProps.discounts.code}</p>
-        <h4>Account</h4>
-        <p>Email: {cartProps.account.email}</p>
-        <h4>Shipping</h4>
-        <p>
-          Address Line 1: {cartProps.shipping.address1}
-          <br />
-          Address Line 2: {cartProps.shipping.address2}
-        </p>
-        <h4>Total</h4>
-        <p>Total: ${total}</p>
+        <DisplayDetails {...cartProps} />
       </Form>
     </div>
   );
 }
 
 export function CartReceipt(cartProps) {
-  const total = 10 * cartProps.items.ebookCount;
   return (
     <div className="cartPanel">
       <h1>Receipt</h1>
-      <h4>Items</h4>
+      <p>
+        Download link: <a href="foo">Fantastic Ebook</a>
+      </p>
+      <DisplayDetails {...cartProps} />
+    </div>
+  );
+}
+
+function DisplayDetails(cartProps) {
+  const total = 10 * cartProps.items.ebookCount;
+  return (
+    <>
+      <h4>Item Quantity</h4>
       <p>Fantastic Ebook: {cartProps.items.ebookCount}</p>
       <h4>Discounts</h4>
       <p>Discount code: {cartProps.discounts.code}</p>
@@ -158,8 +172,14 @@ export function CartReceipt(cartProps) {
         <br />
         Address Line 2: {cartProps.shipping.address2}
       </p>
+      <h4>Shipping</h4>
+      <p>
+        Credit Card: {cartProps.payment.creditCard}
+        <br />
+        Name: {cartProps.payment.nameOnCard}
+      </p>
       <h4>Total</h4>
       <p>Total: ${total}</p>
-    </div>
+    </>
   );
 }

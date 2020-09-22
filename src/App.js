@@ -31,7 +31,7 @@ function App() {
     devTools: true // required to use inspect
   });
 
-  const { error, transient, items, discounts, account, shipping, receipt } = current.context;
+  const { error, transient, items, discounts, account, shipping, payment, receipt } = current.context;
   const toggleOpen = () => send('CART_TOGGLE_OPEN');
   const previous = () => send('CART_PREVIOUS');
   const saveNext = (section, data) => send('CART_SAVE', { section, data });
@@ -48,6 +48,7 @@ function App() {
     discounts,
     account,
     shipping,
+    payment,
     receipt,
     toggleOpen,
     previous,

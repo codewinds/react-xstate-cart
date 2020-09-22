@@ -39,6 +39,7 @@ const appMachine = Machine(
       discounts: {},
       account: {},
       shipping: {},
+      payment: {},
       receipt: {}
     },
     states: {
@@ -58,7 +59,7 @@ const appMachine = Machine(
         }
       },
       cart: {
-        initial: 'closed',
+        initial: 'receipt',
         states: {
           closed: {
             on: {
@@ -93,6 +94,14 @@ const appMachine = Machine(
             ...cartEditingStates,
             on: {
               CART_PREVIOUS: 'account',
+              CART_SAVE: '.saving',
+              CART_NEXT: 'payment'
+            }
+          },
+          payment: {
+            ...cartEditingStates,
+            on: {
+              CART_PREVIOUS: 'shipping',
               CART_SAVE: '.saving',
               CART_NEXT: 'review'
             }
@@ -147,7 +156,8 @@ const appMachine = Machine(
       cartClearData: assign((context, event) => ({
         items: {},
         discounts: {},
-        shipping: {}
+        shipping: {},
+        payment: {}
       }))
     },
     services: {
