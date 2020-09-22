@@ -58,20 +58,7 @@ function Form({
 }
 
 export function CartItems(cartProps) {
-  const {
-    error,
-    transient,
-    isBeingSaved,
-    items,
-    discounts,
-    account,
-    shipping,
-    receipt,
-    toggleOpen,
-    previous,
-    saveNext,
-    escape
-  } = cartProps;
+  const { error, transient, isBeingSaved, previous, saveNext } = cartProps;
   const section = 'items';
   const sectionData = cartProps[section];
   const commonProps = { transient, sectionData, isBeingSaved };
@@ -92,20 +79,7 @@ export function CartItems(cartProps) {
 }
 
 export function CartDiscounts(cartProps) {
-  const {
-    error,
-    transient,
-    isBeingSaved,
-    items,
-    discounts,
-    account,
-    shipping,
-    receipt,
-    toggleOpen,
-    previous,
-    saveNext,
-    escape
-  } = cartProps;
+  const { error, transient, isBeingSaved, previous, saveNext } = cartProps;
   const section = 'discounts';
   const sectionData = cartProps[section];
   const commonProps = { transient, sectionData, isBeingSaved };
@@ -126,20 +100,7 @@ export function CartDiscounts(cartProps) {
 }
 
 export function CartAccount(cartProps) {
-  const {
-    error,
-    transient,
-    isBeingSaved,
-    items,
-    discounts,
-    account,
-    shipping,
-    receipt,
-    toggleOpen,
-    previous,
-    saveNext,
-    escape
-  } = cartProps;
+  const { error, transient, isBeingSaved, previous, saveNext } = cartProps;
   const section = 'account';
   const sectionData = cartProps[section];
   const commonProps = { transient, sectionData, isBeingSaved };
@@ -160,20 +121,7 @@ export function CartAccount(cartProps) {
 }
 
 export function CartShipping(cartProps) {
-  const {
-    error,
-    transient,
-    isBeingSaved,
-    items,
-    discounts,
-    account,
-    shipping,
-    receipt,
-    toggleOpen,
-    previous,
-    saveNext,
-    escape
-  } = cartProps;
+  const { error, transient, isBeingSaved, previous, saveNext } = cartProps;
   const section = 'shipping';
   const sectionData = cartProps[section];
   const commonProps = { transient, sectionData, isBeingSaved };
@@ -199,23 +147,8 @@ export function CartShipping(cartProps) {
 }
 
 export function CartReview(cartProps) {
-  const {
-    error,
-    transient,
-    isBeingSaved,
-    items,
-    discounts,
-    account,
-    shipping,
-    receipt,
-    toggleOpen,
-    previous,
-    saveNext,
-    escape
-  } = cartProps;
+  const { error, isBeingSaved, previous, saveNext } = cartProps;
   const section = 'review';
-  const sectionData = cartProps[section];
-  const commonProps = { transient, sectionData, isBeingSaved };
   const formProps = {
     error,
     section,
@@ -249,24 +182,6 @@ export function CartReview(cartProps) {
 }
 
 export function CartReceipt(cartProps) {
-  const {
-    error,
-    transient,
-    isBeingSaved,
-    items,
-    discounts,
-    account,
-    shipping,
-    receipt,
-    toggleOpen,
-    previous,
-    saveNext,
-    escape
-  } = cartProps;
-  const section = 'receipt';
-  const sectionData = cartProps[section];
-  const commonProps = { transient, sectionData, isBeingSaved };
-  const formProps = { error, section, previous, saveNext, isBeingSaved };
   const total = 10 * cartProps.items.ebookCount;
   return (
     <div className="cartPanel">

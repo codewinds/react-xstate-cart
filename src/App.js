@@ -4,7 +4,7 @@ import { useMachine } from '@xstate/react';
 import { appMachine } from './appMachine';
 import { AppServiceContext } from './reactContexts';
 import { CartLayout } from './CartLayout';
-import { delay, upperFirst } from 'lodash/fp';
+import { delay } from 'lodash/fp';
 import { inspect } from '@xstate/inspect';
 import { toPairs } from 'lodash/fp';
 
@@ -15,17 +15,12 @@ const appMachineWithOptions = appMachine.withConfig({
     saveData: async (context, { section, data }) => {
       console.log('overriden saveData', { section, data });
       return new Promise((resolve, reject) => {
-        // if (firstName && firstName.startsWith('b')) {
-        //   return reject(Error(`failed with firstName: ${firstName}`));
-        // }
         const dataPairs = toPairs(data);
         if (dataPairs.length && dataPairs.every(([k, v]) => v === '')) {
           reject(Error('all values cannot be empty'));
         }
 
         delay(2000, () => resolve({ section, data }));
-
-        // reject(Error(`bad data section:${section} ${JSON.stringify(data)}`));
       });
     }
   }

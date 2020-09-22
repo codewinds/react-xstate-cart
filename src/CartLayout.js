@@ -44,20 +44,6 @@ export function CartLayout(cartProps) {
           <Matches state={'cart.receipt'}>
             <CartReceipt {...cartProps} />
           </Matches>
-          {/* <Matches state={'cart.viewing'}>
-            <CartView {...cartProps} />
-          </Matches>
-          <Matches state={'cart.editing.init'}>
-            <CartEdit {...cartProps} />
-          </Matches>
-          <Matches state={'cart.editing.saving'}>
-            <p>saving...</p>
-            <CartEdit {...cartProps} isBeingSaved={true} />
-          </Matches>
-          <Matches state={'cart.editing.errored'}>
-            <p>An error was enountered while saving!</p>
-            <CartEdit {...cartProps} />
-          </Matches> */}
         </div>
       </DoesNotMatch>
     </div>
