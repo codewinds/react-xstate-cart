@@ -37,20 +37,42 @@
   }
 }
 
-.myDialog {
+.cart {
   margin: 20px;
 }
 
-.myDialogBody {
+.cartBody {
   margin: 20px;
   border: solid black 1px;
   color: blue;
 }
 
-.myDialogPanel {
+.cartPanel {
   margin: 20px;
 }
 
-.myDialogBody form {
+.cartBody form {
   padding: 20px;
+}
+
+.cart input {
+  width: 200px;
+}
+
+.cart input[name='ebookCount'] {
+  width: 30px;
+  margin-left: 10px;
+}
+
+.cart .buttons {
+  margin-top: 10px;
+}
+
+.cart h4 {
+  text-align: left;
+}
+
+.cart p {
+  text-align: left;
+  margin-bottom: 40px;
 }

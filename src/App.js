@@ -3,20 +3,29 @@ import './App.css';
 import { useMachine } from '@xstate/react';
 import { appMachine } from './appMachine';
 import { AppServiceContext } from './reactContexts';
-import { MyDialogLayout } from './MyDialogLayout';
+import { CartLayout } from './CartLayout';
 import { delay, upperFirst } from 'lodash/fp';
 import { inspect } from '@xstate/inspect';
+import { toPairs } from 'lodash/fp';
 
 inspect({ iframe: false });
 
 const appMachineWithOptions = appMachine.withConfig({
   services: {
-    saveUser: async (context, { firstName }) => {
+    saveData: async (context, { section, data }) => {
+      console.log('overriden saveData', { section, data });
       return new Promise((resolve, reject) => {
-        if (firstName && firstName.startsWith('b')) {
-          return reject(Error(`failed with firstName: ${firstName}`));
+        // if (firstName && firstName.startsWith('b')) {
+        //   return reject(Error(`failed with firstName: ${firstName}`));
+        // }
+        const dataPairs = toPairs(data);
+        if (dataPairs.length && dataPairs.every(([k, v]) => v === '')) {
+          reject(Error('all values cannot be empty'));
         }
-        delay(2000, () => resolve({ firstName: upperFirst(firstName) }));
+
+        delay(2000, () => resolve({ section, data }));
+
+        // reject(Error(`bad data section:${section} ${JSON.stringify(data)}`));
       });
     }
   }
@@ -27,21 +36,36 @@ function App() {
     devTools: true // required to use inspect
   });
 
-  const myDialogData = current.context.myDialogData;
-  const myDialogError = current.context.myDialogError;
-  const myDialogTransientData = current.context.myDialogTransientData;
-  const myDialogToggleOpen = () => send('MYDIALOG_TOGGLE_OPEN');
-  const myDialogEdit = () => send('MYDIALOG_EDIT');
-  const myDialogSave = ({ firstName }) => send('MYDIALOG_SAVE', { firstName });
-  const myDialogEscape = () => send('MYDIALOG_ESCAPE');
-  const myDialogProps = {
-    myDialogData,
-    myDialogToggleOpen,
-    myDialogEdit,
-    myDialogSave,
-    myDialogError,
-    myDialogTransientData,
-    myDialogEscape
+  const {
+    error,
+    transient,
+    items,
+    discounts,
+    account,
+    shipping,
+    receipt
+  } = current.context;
+  const toggleOpen = () => send('CART_TOGGLE_OPEN');
+  const previous = () => send('CART_PREVIOUS');
+  const saveNext = (section, data) => send('CART_SAVE', { section, data });
+  const escape = () => send('CART_ESCAPE');
+  const isBeingSaved = current.matches('formState.isBeingSaved');
+
+  console.log('isBeingSaved', isBeingSaved);
+
+  const cartProps = {
+    error,
+    transient,
+    isBeingSaved,
+    items,
+    discounts,
+    account,
+    shipping,
+    receipt,
+    toggleOpen,
+    previous,
+    saveNext,
+    escape
   };
 
   console.log('current.value', current.value);
@@ -50,7 +74,7 @@ function App() {
   return (
     <AppServiceContext.Provider value={[current, send]}>
       <div className="App">
-        <MyDialogLayout {...myDialogProps} />
+        <CartLayout {...cartProps} />
       </div>
     </AppServiceContext.Provider>
   );
