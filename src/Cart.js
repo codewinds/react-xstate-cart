@@ -1,38 +1,7 @@
 import React from 'react';
 import { fromPairs, get } from 'lodash/fp';
 
-function Input({
-  name,
-  placeholder,
-  transient,
-  sectionData,
-  isBeingSaved,
-  preText,
-  autoFocus = false
-}) {
-  return (
-    <div>
-      {preText}
-      <input
-        name={name}
-        defaultValue={get(name, transient) || get(name, sectionData)}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        disabled={isBeingSaved}
-      />
-    </div>
-  );
-}
-
-function Form({
-  error,
-  section,
-  previous,
-  saveNext,
-  isBeingSaved,
-  saveLabel,
-  children
-}) {
+function Form({ error, section, previous, saveNext, isBeingSaved, saveLabel, children }) {
   return (
     <>
       {error && <div>{error.toString()}</div>}
@@ -57,6 +26,21 @@ function Form({
   );
 }
 
+function Input({ name, placeholder, transient, sectionData, isBeingSaved, preText, autoFocus = false }) {
+  return (
+    <div>
+      {preText}
+      <input
+        name={name}
+        defaultValue={get(name, transient) || get(name, sectionData)}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        disabled={isBeingSaved}
+      />
+    </div>
+  );
+}
+
 export function CartItems(cartProps) {
   const { error, transient, isBeingSaved, previous, saveNext } = cartProps;
   const section = 'items';
@@ -67,12 +51,7 @@ export function CartItems(cartProps) {
     <div className="cartPanel">
       <h1>Items</h1>
       <Form {...formProps}>
-        <Input
-          name="ebookCount"
-          preText="Fantastic ebook"
-          autoFocus={true}
-          {...commonProps}
-        />
+        <Input name="ebookCount" preText="Fantastic ebook" autoFocus={true} {...commonProps} />
       </Form>
     </div>
   );
@@ -88,12 +67,7 @@ export function CartDiscounts(cartProps) {
     <div className="cartPanel">
       <h1>Discounts</h1>
       <Form {...formProps}>
-        <Input
-          name="code"
-          placeholder="Enter your discount code"
-          autoFocus={true}
-          {...commonProps}
-        />
+        <Input name="code" placeholder="Enter your discount code" autoFocus={true} {...commonProps} />
       </Form>
     </div>
   );
@@ -109,12 +83,7 @@ export function CartAccount(cartProps) {
     <div className="cartPanel">
       <h1>Account</h1>
       <Form {...formProps}>
-        <Input
-          name="email"
-          placeholder="Enter your email"
-          autoFocus={true}
-          {...commonProps}
-        />
+        <Input name="email" placeholder="Enter your email" autoFocus={true} {...commonProps} />
       </Form>
     </div>
   );
@@ -130,17 +99,8 @@ export function CartShipping(cartProps) {
     <div className="cartPanel">
       <h1>Shipping</h1>
       <Form {...formProps}>
-        <Input
-          name="address1"
-          placeholder="Enter your address line 1"
-          autoFocus={true}
-          {...commonProps}
-        />
-        <Input
-          name="address2"
-          placeholder="Enter your address line 2"
-          {...commonProps}
-        />
+        <Input name="address1" placeholder="Enter your address line 1" autoFocus={true} {...commonProps} />
+        <Input name="address2" placeholder="Enter your address line 2" {...commonProps} />
       </Form>
     </div>
   );
