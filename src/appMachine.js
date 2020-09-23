@@ -59,7 +59,7 @@ const appMachine = Machine(
         }
       },
       cart: {
-        initial: 'receipt',
+        initial: 'closed',
         states: {
           closed: {
             on: {
