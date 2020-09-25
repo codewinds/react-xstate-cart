@@ -8,9 +8,10 @@ import { delay } from 'lodash/fp';
 import { inspect } from '@xstate/inspect';
 import { toPairs } from 'lodash/fp';
 
-inspect({ iframe: false });
+inspect({ iframe: false }); // enables the xstate inspect window
 
 const appMachineWithOptions = appMachine.withConfig({
+  // you can override actions, services, guards, activities
   services: {
     saveData: async (context, { section, data }) => {
       console.log('overriden saveData', { section, data });
@@ -28,7 +29,7 @@ const appMachineWithOptions = appMachine.withConfig({
 
 function App() {
   const [current, send] = useMachine(appMachineWithOptions, {
-    devTools: true // required to use inspect
+    devTools: true // enabled redux dev tools and required to use xstate inspect
   });
 
   const { error, transient, items, discounts, account, shipping, payment, receipt } = current.context;
