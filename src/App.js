@@ -7,9 +7,10 @@ import { MyDialogLayout } from './MyDialogLayout';
 import { delay, upperFirst } from 'lodash/fp';
 import { inspect } from '@xstate/inspect';
 
-inspect({ iframe: false });
+inspect({ iframe: false }); // enables the xstate inspect window
 
 const appMachineWithOptions = appMachine.withConfig({
+  // you can override actions, services, guards, activities
   services: {
     saveUser: async (context, { firstName }) => {
       return new Promise((resolve, reject) => {
@@ -24,7 +25,7 @@ const appMachineWithOptions = appMachine.withConfig({
 
 function App() {
   const [current, send] = useMachine(appMachineWithOptions, {
-    devTools: true // required to use inspect
+    devTools: true // enabled redux dev tools and required to use xstate inspect
   });
 
   const myDialogData = current.context.myDialogData;
