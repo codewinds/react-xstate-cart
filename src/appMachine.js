@@ -109,7 +109,7 @@ const appMachine = Machine(
           review: {
             ...cartEditingStates,
             on: {
-              CART_PREVIOUS: 'shipping',
+              CART_PREVIOUS: 'payment',
               CART_SAVE: '.saving',
               CART_NEXT: 'receipt'
             }
