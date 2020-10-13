@@ -1,26 +1,28 @@
 import { Machine, assign, send } from 'xstate';
 
-const myDialogEditingStates = {
+const cartEditingStates = {
   initial: 'init',
   states: {
     init: {},
     saving: {
-      entry: ['myDialogRecordTransient'],
+      entry: ['cartSetIsSaving', 'cartRecordTransient'],
+      exit: ['cartClearIsSaving'],
       invoke: {
-        id: 'saveUser',
-        src: 'saveUser',
+        id: 'saveData',
+        src: 'saveData',
         onDone: {
-          actions: ['myDialogUpdate', 'myDialogNext']
+          actions: ['cartUpdate', 'cartNext']
         },
         onError: {
           target: 'errored',
-          actions: ['myDialogErrored']
+          actions: ['cartErrored']
         }
       }
     },
     errored: {
+      exit: ['cartClearError'],
       on: {
-        MYDIALOG_SAVE: 'saving'
+        CART_SAVE: 'saving'
       }
     }
   }
@@ -31,61 +33,137 @@ const appMachine = Machine(
     id: 'app',
     type: 'parallel',
     context: {
-      myDialogData: { firstName: '' },
-      myDialogError: null,
-      myDialogTransientData: null
+      error: null,
+      transient: {},
+      items: {},
+      discounts: {},
+      account: {},
+      shipping: {},
+      payment: {},
+      receipt: {}
     },
     states: {
-      mydialog: {
-        initial: 'closed',
+      formState: {
+        initial: 'idle',
         states: {
-          viewing: {
+          idle: {
             on: {
-              MYDIALOG_TOGGLE_OPEN: 'closed',
-              MYDIALOG_EDIT: 'editing'
+              CART_FORM_SAVING: 'isBeingSaved'
             }
           },
-          editing: {
+          isBeingSaved: {
             on: {
-              MYDIALOG_TOGGLE_OPEN: 'closed',
-              MYDIALOG_ESCAPE: 'viewing',
-              MYDIALOG_SAVE: '.saving',
-              MYDIALOG_NEXT: 'viewing'
-            },
-            ...myDialogEditingStates
-          },
-          closed: {
-            on: {
-              MYDIALOG_TOGGLE_OPEN: 'viewing'
+              CART_FORM_IDLE: 'idle'
             }
           }
+        }
+      },
+      cart: {
+        initial: 'closed',
+        states: {
+          closed: {
+            on: {
+              CART_TOGGLE_OPEN: 'items'
+            }
+          },
+          items: {
+            ...cartEditingStates,
+            on: {
+              CART_PREVIOUS: 'closed',
+              CART_SAVE: '.saving',
+              CART_NEXT: 'discounts'
+            }
+          },
+          discounts: {
+            ...cartEditingStates,
+            on: {
+              CART_PREVIOUS: 'items',
+              CART_SAVE: '.saving',
+              CART_NEXT: 'account'
+            }
+          },
+          account: {
+            ...cartEditingStates,
+            on: {
+              CART_PREVIOUS: 'discounts',
+              CART_SAVE: '.saving',
+              CART_NEXT: 'shipping'
+            }
+          },
+          shipping: {
+            ...cartEditingStates,
+            on: {
+              CART_PREVIOUS: 'account',
+              CART_SAVE: '.saving',
+              CART_NEXT: 'payment'
+            }
+          },
+          payment: {
+            ...cartEditingStates,
+            on: {
+              CART_PREVIOUS: 'shipping',
+              CART_SAVE: '.saving',
+              CART_NEXT: 'review'
+            }
+          },
+          review: {
+            ...cartEditingStates,
+            on: {
+              CART_PREVIOUS: 'payment',
+              CART_SAVE: '.saving',
+              CART_NEXT: 'receipt'
+            }
+          },
+          receipt: {
+            ...cartEditingStates,
+            exit: ['cartClearData']
+          }
+        },
+        on: {
+          CART_TOGGLE_OPEN: '.closed'
         }
       }
     }
   },
   {
     actions: {
-      myDialogRecordTransient: assign((context, data) => ({
-        myDialogTransientData: data,
-        myDialogError: null
+      cartRecordTransient: assign((context, { data: { section, data } }) => ({
+        transient: data,
+        cartError: null
       })),
-      myDialogUpdate: assign((context, { data }) => ({
-        myDialogData: data,
-        myDialogTransientData: null
+      cartSetIsSaving: send((context, event) => ({
+        type: 'CART_FORM_SAVING'
       })),
-      myDialogNext: send((context, event) => ({
-        type: 'MYDIALOG_NEXT'
+      cartClearIsSaving: send((context, event) => ({
+        type: 'CART_FORM_IDLE'
       })),
-      myDialogErrored: assign((context, { data: err }) => ({
-        myDialogError: err
+      cartUpdate: assign((context, { data: { section, data } }) => {
+        console.log('cartUpdate', { section, data });
+        return {
+          [section]: data,
+          transient: null
+        };
+      }),
+      cartNext: send((context, event) => ({
+        type: 'CART_NEXT'
+      })),
+      cartClearError: assign((context, event) => ({
+        error: null
+      })),
+      cartErrored: assign((context, { data: err }) => ({
+        error: err
+      })),
+      cartClearData: assign((context, event) => ({
+        items: {},
+        discounts: {},
+        shipping: {},
+        payment: {}
       }))
     },
     services: {
-      saveUser: async (context, { firstName }) => {
-        console.log('in saveUser', firstName);
-        return {
-          firstName: firstName.toUpperCase()
-        };
+      saveData: async (context, { section, data }) => {
+        console.log('in saveData', { section, data });
+        return { section, data };
       }
     }
   }
