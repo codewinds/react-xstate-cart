@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# react-xstate-cart
+
+An example shopping cart multi-page wizard built with XState FSM and Statechart features in a React.js app.
 
 ## Available Scripts
 
